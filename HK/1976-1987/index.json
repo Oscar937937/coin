@@ -1,0 +1,60 @@
+{
+    "year": "1976-1987",
+    "description": "1976年至1987年是香港硬幣發展的重要時期，發行了多種面值的硬幣。",
+    "coins": [
+        {
+            "id": "1",
+            "denomination": "1 Cent",
+            "description": "1976-1987年一仙銅幣，正面刻有伊利沙伯二世的頭像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1976-1.jpg",
+                "reverse": "1976-2.jpg"
+            }
+        },
+        {
+            "id": "2",
+            "denomination": "2 Cents",
+            "description": "1976-1987年二仙銅幣，正面刻有伊利沙伯二世的頭像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1976-3.jpg",
+                "reverse": "1976-4.jpg"
+            }
+        },
+        {
+            "id": "3",
+            "denomination": "5 Cents",
+            "description": "1976-1987年五仙銅幣，正面刻有伊利沙伯二世的頭像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1976-5.jpg",
+                "reverse": "1976-6.jpg"
+            }
+        },
+        {
+            "id": "4",
+            "denomination": "10 Cents",
+            "description": "1976-1987年十仙銅幣，正面刻有伊利沙伯二世的頭像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1976-7.jpg",
+                "reverse": "1976-8.jpg"
+            }
+        },
+        {
+            "id": "5",
+            "denomination": "20 Cents",
+            "description": "1976-1987年二十仙銅幣，正面刻有伊利沙伯二世的頭像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1976-9.jpg",
+                "reverse": "1976-10.jpg"
+            }
+        },
+        {
+            "id": "6",
+            "denomination": "50 Cents",
+            "description": "1976-1987年五十仙銅幣，正面刻有伊利沙伯二世的頭像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1976-11.jpg",
+                "reverse": "1976-12.jpg"
+            }
+        }
+    ]
+} 

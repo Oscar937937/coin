@@ -1,0 +1,54 @@
+{
+    "year": "2002",
+    "description": "這一年的硬幣反映了香港回歸後的設計風格。",
+    "coins": [
+        {
+            "denomination": "1 Dollar",
+            "description": "正面刻有紫荊花圖案，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "2002-1.jpg",
+                "reverse": "2002-1.jpg"
+            }
+        },
+        {
+            "denomination": "2 Dollars",
+            "description": "正面刻有紫荊花圖案，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "2002-2.jpg",
+                "reverse": "2002-2.jpg"
+            }
+        },
+        {
+            "denomination": "5 Dollars",
+            "description": "正面刻有紫荊花圖案，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "2002-3.jpg",
+                "reverse": "2002-3.jpg"
+            }
+        },
+        {
+            "denomination": "10 Dollars",
+            "description": "正面刻有紫荊花圖案，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "2002-4.jpg",
+                "reverse": "2002-4.jpg"
+            }
+        },
+        {
+            "denomination": "20 Dollars",
+            "description": "正面刻有紫荊花圖案，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "2002-5.jpg",
+                "reverse": "2002-5.jpg"
+            }
+        },
+        {
+            "denomination": "50 Dollars",
+            "description": "正面刻有紫荊花圖案，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "2002-6.jpg",
+                "reverse": "2002-6.jpg"
+            }
+        }
+    ]
+} 

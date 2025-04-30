@@ -1,0 +1,14 @@
+{
+    "year": "1994",
+    "description": "這一年的硬幣設計延續了過渡時期的風格。",
+    "coins": [
+        {
+            "denomination": "1 Dollar",
+            "description": "正面刻有英女皇伊利沙伯二世的肖像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1994-1.1.jpg",
+                "reverse": "1994-1.2.jpg"
+            }
+        }
+    ]
+} 

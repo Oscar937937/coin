@@ -1,0 +1,70 @@
+{
+    "year": "1997",
+    "description": "這一年的硬幣是香港回歸前最後一批帶有英女皇肖像的硬幣。",
+    "coins": [
+        {
+            "denomination": "1 Dollar",
+            "description": "正面刻有英女皇伊利沙伯二世的肖像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1997-1.1.jpg",
+                "reverse": "1997-1.2.jpg"
+            }
+        },
+        {
+            "denomination": "2 Dollars",
+            "description": "正面刻有英女皇伊利沙伯二世的肖像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1997-2.jpg",
+                "reverse": "1997-2.jpg"
+            }
+        },
+        {
+            "denomination": "5 Dollars",
+            "description": "正面刻有英女皇伊利沙伯二世的肖像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1997-3.jpg",
+                "reverse": "1997-3.jpg"
+            }
+        },
+        {
+            "denomination": "10 Dollars",
+            "description": "正面刻有英女皇伊利沙伯二世的肖像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1997-4.jpg",
+                "reverse": "1997-4.jpg"
+            }
+        },
+        {
+            "denomination": "20 Dollars",
+            "description": "正面刻有英女皇伊利沙伯二世的肖像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1997-5.jpg",
+                "reverse": "1997-5.jpg"
+            }
+        },
+        {
+            "denomination": "50 Dollars",
+            "description": "正面刻有英女皇伊利沙伯二世的肖像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1997-6.jpg",
+                "reverse": "1997-6.jpg"
+            }
+        },
+        {
+            "denomination": "100 Dollars",
+            "description": "正面刻有英女皇伊利沙伯二世的肖像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1997-7.jpg",
+                "reverse": "1997-7.jpg"
+            }
+        },
+        {
+            "denomination": "500 Dollars",
+            "description": "正面刻有英女皇伊利沙伯二世的肖像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1997-8.jpg",
+                "reverse": "1997-8.jpg"
+            }
+        }
+    ]
+} 

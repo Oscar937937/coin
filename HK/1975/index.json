@@ -1,0 +1,20 @@
+{
+    "year": "1975",
+    "description": "1975年發行的硬幣採用了新的設計風格，反映了香港經濟的快速發展。",
+    "coins": [
+        {
+            "denomination": "1 Cent",
+            "images": {
+                "obverse": "1975-1.1.jpg",
+                "reverse": "1975-1.2.jpg"
+            }
+        },
+        {
+            "denomination": "5 Cents",
+            "images": {
+                "obverse": "1975-2.1.jpg",
+                "reverse": "1975-2.2.jpg"
+            }
+        }
+    ]
+} 

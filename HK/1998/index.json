@@ -1,0 +1,14 @@
+{
+    "year": "1998",
+    "description": "這一年的硬幣是香港回歸後首批新設計的硬幣。",
+    "coins": [
+        {
+            "denomination": "1 Dollar",
+            "description": "正面刻有紫荊花圖案，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1998-1.1.jpg",
+                "reverse": "1998-1.2.jpg"
+            }
+        }
+    ]
+} 

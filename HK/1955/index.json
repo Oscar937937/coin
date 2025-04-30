@@ -1,0 +1,15 @@
+{
+    "year": "1955",
+    "description": "1955年發行的硬幣反映了戰後香港經濟的恢復和發展。",
+    "coins": [
+        {
+            "id": "1",
+            "denomination": "1 Cent",
+            "description": "1955年一仙銅幣，正面刻有伊利沙伯二世的頭像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "1955-1.jpg",
+                "reverse": "1955-1.jpg"
+            }
+        }
+    ]
+} 

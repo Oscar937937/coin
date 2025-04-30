@@ -1,0 +1,15 @@
+{
+    "year": "1980",
+    "description": "這一年的硬幣反映了香港經濟繁榮的時期，硬幣設計更加現代化。",
+    "coins": [
+        {
+            "id": "1",
+            "denomination": "1 Dollar",
+            "description": "正面刻有英女皇伊利沙伯二世的肖像，反面刻有面值和發行年份。",
+            "images": {
+                "obverse": "coins_1980-1.jpg",
+                "reverse": "coins_1980-1.jpg"
+            }
+        }
+    ]
+} 
