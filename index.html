@@ -1,0 +1,1185 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>擲硬幣遊戲</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Sanchez');
+
+        *,
+        *:after,
+        *:before {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-image: url('./background.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .pound {
+            --face: #ccffcc;
+            --sign: #009933;
+            --circle: #669999;
+            --side: #99ff99;
+            --slide: #669999;
+        }
+
+        .container {
+            width: 10em;
+            height: 10em;
+            position: relative;
+            perspective: 300px;
+            margin: 2em auto;
+            transform: translateZ(-0.4em);
+        }
+
+        .coin {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+            --final-rotation: 1800deg;
+        }
+
+        .face {
+            border-radius: 5em;
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            background: var(--face);
+        }
+
+        .front {
+            transform: translate3d(0, 0, 0.4em) rotateY(0);
+        }
+
+        .back {
+            transform: translate3d(0, 0, 0.4em) rotateY(180deg);
+        }
+
+        .symbol {
+            position: absolute;
+            color: var(--sign);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5em;
+            font-family: Sanchez, sans-serif;
+        }
+
+        .circle {
+            border-radius: 5em;
+            border: 0.35em dashed var(--circle);
+            width: 8em;
+            height: 8em;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+        }
+
+        .side {
+            width: 0.8em;
+            height: 1.61em;
+            background: var(--side);
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            backface-visibility: hidden;
+            border-top: 0.2em solid var(--slide);
+            border-bottom: 0.2em solid var(--slide);
+        }
+
+        @keyframes flipCoin {
+            0% {
+                transform: rotateY(0deg) rotateX(0deg) rotateZ(0deg);
+            }
+            100% {
+                transform: rotateY(var(--final-rotation)) rotateX(0deg) rotateZ(720deg);
+            }
+        }
+
+        .coin.flipping {
+            animation: flipCoin 3s cubic-bezier(0.38, 0.02, 0.55, 0.99) forwards;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            font-size: 2.8em;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+            color: black;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 2.2em;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            display: none; /* 初始隱藏 */
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        video {
+            width: 600px; /* 調整影片寬度 */
+            height: 600px; /* 調整影片高度 */
+            border-radius: 10px;
+            display: none; /* 初始隱藏 */
+        }
+        #leaderboard {
+            margin-top: 20px;
+            font-size: 18px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            display: none; /* 初始隱藏 */
+        }
+        .auth-container {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 250px;
+            z-index: 100;
+            margin-bottom: 20px;
+        }
+        .auth-container.active {
+            display: block;
+        }
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .auth-form input {
+            padding: 6px;
+            border-radius: 5px;
+            border: none;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        .auth-form button {
+            padding: 6px 12px;
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .auth-container p {
+            font-size: 12px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .auth-container a {
+            color: #ffd700;
+            text-decoration: none;
+        }
+        .auth-container a:hover {
+            text-decoration: underline;
+        }
+        .auth-container h2 {
+            font-size: 16px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #ffd700;
+        }
+        .game-container {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+            margin: 20px auto;
+            max-width: 800px;
+        }
+        .game-container.active {
+            display: block;
+        }
+        #userInfo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            color: white;
+            font-size: 16px;
+            z-index: 1000;
+        }
+        #userInfo.active {
+            display: block;
+        }
+        #userInfo button {
+            margin: 5px;
+            padding: 8px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            border: none;
+        }
+        #userInfo button:first-of-type {
+            background-color: #4CAF50;
+        }
+        #userInfo button:last-of-type {
+            background-color: #f44336;
+        }
+        #userInfo button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        #userInfo div {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .leaderboards-container {
+            display: flex;
+            gap: 40px;
+            margin-top: 20px;
+        }
+        .leaderboard-section {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            min-width: 300px;
+        }
+        .leaderboard-section h2 {
+            margin-top: 0;
+            color: #ffd700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .leaderboard-section p {
+            margin: 5px 0;
+            padding: 5px;
+            border-radius: 3px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        /* 移除教學按鈕樣式 */
+        .faq-button,
+        .tooltip,
+        .tooltip::before {
+            display: none;
+        }
+        .tutorial-controls button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+
+        .tutorial-controls button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        .tutorial-controls button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 關閉按鈕樣式 */
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #666;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .close-button:hover {
+            background-color: #f0f0f0;
+            color: #333;
+        }
+
+        /* 教學指示器樣式 */
+        .tutorial-pointer {
+            position: fixed;
+            z-index: 2001;
+            display: none;
+            pointer-events: none;
+        }
+
+        .tutorial-pointer.active {
+            display: block;
+        }
+
+        .tutorial-text {
+            position: absolute;
+            background-color: white;
+            padding: 15px;
+            border-radius: 10px;
+            max-width: 300px;
+            z-index: 1002;
+            font-size: 16px;
+            line-height: 1.5;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            pointer-events: none;
+        }
+
+        /* 教學高亮框樣式 */
+        .tutorial-highlight {
+            position: absolute;
+            border: 3px solid #FFD700;
+            border-radius: 10px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+            z-index: 1001;
+            animation: highlight-pulse 2s infinite;
+        }
+
+        @keyframes highlight-pulse {
+            0% { box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.3), 0 0 25px rgba(255, 215, 0, 0.8); }
+            100% { box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 215, 0, 0.5); }
+        }
+
+        /* 教學控制按鈕樣式 */
+        .tutorial-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1003;
+            background-color: white;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .tutorial-controls button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .tutorial-controls button:hover {
+            background-color: #45a049;
+        }
+
+        .tutorial-controls button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* 教學遮罩樣式 */
+        .tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            display: none;
+            pointer-events: none;
+        }
+
+        /* 貨幣小知識按鈕樣式 */
+        .coin-knowledge-btn-link {
+            position: fixed;
+            right: 20px;
+            bottom: 130px;
+            z-index: 1000;
+        }
+
+        .coin-quiz-btn-link {
+            position: fixed;
+            right: 20px;
+            bottom: 189px;
+            z-index: 1000;
+        }
+
+        .coin-knowledge-btn, .coin-quiz-btn {
+            background-color: #fff;
+            color: #FFD700;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            width: 140px;
+            height: 54px;
+            transition: 0.3s;
+            font-size: 1.18em;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        }
+
+        .coin-knowledge-btn:hover, .coin-quiz-btn:hover {
+            background-color: #FFD700;
+            color: #fff;
+            box-shadow: 0 0 0 5px #ffe0665f;
+        }
+
+        /* 成就面板樣式 */
+        #achievementsPanel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            max-height: 60px;
+            overflow: hidden;
+        }
+
+        #achievementsPanel.expanded {
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .achievements-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: linear-gradient(135deg, #ffd700, #ffa500);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+
+        .achievements-header span {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        #toggleAchievements {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        #toggleAchievements:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .achievements-content {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 0 0 10px 10px;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .achievement-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .achievement-icon {
+            width: 50px;
+            height: 50px;
+            background: #ffd700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.8em;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-name {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .achievement-description {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .achievement-status {
+            font-size: 0.8em;
+            color: #ffa500;
+            font-weight: bold;
+        }
+
+        .achievement-locked {
+            opacity: 0.7;
+        }
+
+        .achievement-locked .achievement-icon {
+            background: #ccc;
+        }
+
+        .achievement-locked .achievement-status {
+            color: #999;
+        }
+
+        /* 成就分類標題樣式 */
+        .achievement-category-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #ffa500;
+            margin: 15px 0 10px 0;
+            padding: 5px 10px;
+            background: rgba(255, 165, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        /* 自定義滾動條樣式 */
+        #achievementsPanel.expanded::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #achievementsPanel.expanded::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        #achievementsPanel.expanded::-webkit-scrollbar-thumb {
+            background: #ffa500;
+            border-radius: 4px;
+        }
+
+        #achievementsPanel.expanded::-webkit-scrollbar-thumb:hover {
+            background: #ff8c00;
+        }
+
+        .login-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            width: 300px;
+            margin: 20px auto;
+        }
+
+        /* 金幣計數器樣式 */
+        .coin-counter {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: #FFD700;
+            padding: 10px 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #000;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            border: 2px solid #DAA520;
+        }
+
+        .coin-counter i {
+            color: #000;
+            font-size: 20px;
+        }
+
+        .coin-counter span {
+            font-family: 'Arial', sans-serif;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 教學按鈕樣式 */
+        .faq-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background-color: #ffe53b;
+            background-image: linear-gradient(147deg, #ffe53b 0%, #ff2525 74%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.151);
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .faq-button svg {
+            height: 1.5em;
+            fill: white;
+        }
+
+        .faq-button:hover svg {
+            animation: jello-vertical 0.7s both;
+        }
+
+        @keyframes jello-vertical {
+            0% {
+                transform: scale3d(1, 1, 1);
+            }
+            30% {
+                transform: scale3d(0.75, 1.25, 1);
+            }
+            40% {
+                transform: scale3d(1.25, 0.75, 1);
+            }
+            50% {
+                transform: scale3d(0.85, 1.15, 1);
+            }
+            65% {
+                transform: scale3d(1.05, 0.95, 1);
+            }
+            75% {
+                transform: scale3d(0.95, 1.05, 1);
+            }
+            100% {
+                transform: scale3d(1, 1, 1);
+            }
+        }
+
+        .tooltip {
+            position: absolute;
+            top: -20px;
+            opacity: 0;
+            background-color: #ffe53b;
+            background-image: linear-gradient(147deg, #ffe53b 0%, #ff2525 74%);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition-duration: 0.2s;
+            pointer-events: none;
+            letter-spacing: 0.5px;
+        }
+
+        .tooltip::before {
+            position: absolute;
+            content: "";
+            width: 10px;
+            height: 10px;
+            background-color: #ff2525;
+            background-size: 1000%;
+            background-position: center;
+            transform: rotate(45deg);
+            bottom: -15%;
+            transition-duration: 0.3s;
+        }
+
+        .faq-button:hover .tooltip {
+            top: -40px;
+            opacity: 1;
+            transition-duration: 0.3s;
+        }
+
+        /* 修改按鈕樣式 */
+        #guessHeads, #guessTails {
+            padding: 15px 30px;
+            font-size: 24px;
+            margin: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid #FFD700;
+            color: #FFD700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #guessHeads:hover, #guessTails:hover {
+            background-color: #FFD700;
+            color: black;
+            transform: scale(1.05);
+        }
+
+        /* 移除教學系統相關樣式 */
+        .tutorial-overlay,
+        .tutorial-highlight,
+        .tutorial-text,
+        .tutorial-controls,
+        .tutorial-pointer,
+        .faq-button,
+        .tooltip,
+        .tooltip::before {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="coin-counter" id="coinCounter">
+        <i class="fas fa-coins"></i>
+        <span id="totalCoins">0</span>
+    </div>
+    <div id="userInfo"></div>
+
+    <div id="gameContainer" class="game-container">
+        <div id="authContainer" class="auth-container">
+            <h2>用戶登入</h2>
+            <form id="loginForm" class="auth-form">
+                <input type="text" id="loginUsername" placeholder="用戶名" required>
+                <input type="password" id="loginPassword" placeholder="密碼" required>
+                <button type="submit">登入</button>
+            </form>
+            <p>還沒有帳號？ <a href="#" id="showRegister">註冊新帳號</a></p>
+        </div>
+
+        <div id="registerContainer" class="auth-container" style="display: none;">
+            <h2>用戶註冊</h2>
+            <form id="registerForm" class="auth-form">
+                <input type="text" id="registerUsername" placeholder="用戶名" required>
+                <input type="password" id="registerPassword" placeholder="密碼" required>
+                <input type="password" id="confirmPassword" placeholder="確認密碼" required>
+                <button type="submit">註冊</button>
+            </form>
+            <p>已有帳號？ <a href="#" id="showLogin">返回登入</a></p>
+        </div>
+
+        <h1>擲硬幣遊戲</h1>
+        <button id="guessHeads">猜數字</button>
+        <button id="guessTails">猜圖案</button>
+        <div id="result"></div>
+        
+        <!-- 替換視頻元素為硬幣動畫 -->
+        <div class="container" id="coinContainer">
+            <div class="coin pound" id="flipCoin">
+                <div class="face front">
+                    <div class="symbol">1</div>
+                    <div class="circle"></div>
+                </div>
+                <div class="face back">
+                    <div class="symbol">$</div>
+                    <div class="circle"></div>
+                </div>
+                <figure class="side"></figure>
+                <figure class="side"></figure>
+                <figure class="side"></figure>
+                <figure class="side"></figure>
+                <figure class="side"></figure>
+                <figure class="side"></figure>
+                <figure class="side"></figure>
+                <figure class="side"></figure>
+                <figure class="side"></figure>
+                <figure class="side"></figure>
+                <figure class="side"></figure>
+                <figure class="side"></figure>
+                <figure class="side"></figure>
+                <figure class="side"></figure>
+                <figure class="side"></figure>
+            </div>
+        </div>
+        
+        <div id="leaderboard"></div>
+    </div>
+
+    <!-- 圖片放大預覽 -->
+    <div id="coinImgModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);z-index:3000;align-items:center;justify-content:center;">
+        <img id="coinImgModalImg" src="" alt="硬幣大圖" style="max-width:90vw;max-height:90vh;border-radius:12px;box-shadow:0 4px 32px rgba(0,0,0,0.5);">
+    </div>
+
+    <!-- 添加成就面板 -->
+    <div id="achievementsPanel">
+        <div class="achievements-header">
+            <span>成就系統</span>
+            <button id="toggleAchievements">顯示/隱藏</button>
+        </div>
+        <div class="achievements-content">
+            <div class="achievements-list">
+                <!-- 成就列表將由 JavaScript 動態生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 貨幣小知識按鈕 -->
+    <a href="coin-knowledge.html" class="coin-knowledge-btn-link" id="coinKnowledgeBtn">
+        <button class="coin-knowledge-btn">
+            貨幣小知識
+        </button>
+    </a>
+
+    <!-- 貨幣小測驗按鈕 -->
+    <a href="coin-quiz.html" class="coin-quiz-btn-link" id="coinQuizBtn">
+        <button class="coin-quiz-btn">
+            貨幣小測驗
+        </button>
+    </a>
+
+    <!-- 移除教學按鈕 -->
+    <button class="faq-button" onclick="showTutorial()">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+            <path d="M80 160c0-35.3 28.7-64 64-64h32c35.3 0 64 28.7 64 64v3.6c0 21.8-11.1 42.1-29.4 53.8l-42.2 27.1c-25.2 16.2-40.4 44.1-40.4 74V320c0 17.7 14.3 32 32 32s32-14.3 32-32v-1.4c0-8.2 4.2-15.8 11-20.2l42.2-27.1c36.6-23.6 58.8-64.1 58.8-107.7V160c0-70.7-57.3-128-128-128H144C73.3 32 16 89.3 16 160c0 17.7 14.3 32 32 32s32-14.3 32-32zm80 320a40 40 0 1 0 0-80 40 40 0 1 0 0 80z"></path>
+        </svg>
+        <span class="tooltip">遊戲教學</span>
+    </button>
+
+    <!-- 移除教學遮罩 -->
+    <div class="tutorial-overlay" id="tutorialOverlay">
+        <div class="tutorial-highlight" id="tutorialHighlight"></div>
+        <div class="tutorial-text" id="tutorialText"></div>
+        <div class="tutorial-controls">
+            <button id="prevStep">上一步</button>
+            <span id="stepIndicator">1/8</span>
+            <button id="nextStep">下一步</button>
+        </div>
+    </div>
+
+    <script src="coin.js"></script>
+    <script>
+    const coinImgModal = document.getElementById('coinImgModal');
+    const coinImgModalImg = document.getElementById('coinImgModalImg');
+    const coinKnowledgeBtnLink = document.querySelector('.coin-knowledge-btn-link');
+    const coinQuizBtnLink = document.querySelector('.coin-quiz-btn-link');
+
+    // 檢查本地存儲中的登入狀態
+    function checkLoginState() {
+        const savedUser = localStorage.getItem('currentUser');
+        if (savedUser) {
+            document.getElementById('userInfo').classList.add('active');
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('gameContainer').classList.add('active');
+            updateUserInfo();
+        }
+    }
+
+    // 更新按鈕位置
+    function updateButtonPosition() {
+        const userInfo = document.getElementById('userInfo');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        
+        if (userInfo && userInfo.classList.contains('active')) {
+            // 用戶已登入
+            coinKnowledgeBtnLink.style.bottom = '930px';
+            coinQuizBtnLink.style.bottom = '989px';
+        } else if (loginForm.style.display === 'block') {
+            // 顯示登入表單
+            coinKnowledgeBtnLink.style.bottom = '930px';
+            coinQuizBtnLink.style.bottom = '989px';
+        } else if (registerForm.style.display === 'block') {
+            // 顯示註冊表單
+            coinKnowledgeBtnLink.style.bottom = '930px';
+            coinQuizBtnLink.style.bottom = '989px';
+        } else {
+            // 其他情況
+            coinKnowledgeBtnLink.style.bottom = '930px';
+            coinQuizBtnLink.style.bottom = '989px';
+        }
+    }
+
+    // 頁面加載時檢查登入狀態
+    window.addEventListener('load', function() {
+        checkLoginState();
+        updateButtonPosition();
+    });
+
+    // 監聽瀏覽器歷史記錄變化
+    window.addEventListener('popstate', function() {
+        checkLoginState();
+        updateButtonPosition();
+    });
+
+    // 監聽表單顯示狀態變化
+    const observer = new MutationObserver((mutations) => {
+        // 檢查是否有登出或註銷操作
+        const userInfo = document.getElementById('userInfo');
+        if (userInfo && !userInfo.classList.contains('active')) {
+            updateButtonPosition();
+        }
+    });
+
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['style', 'class']
+    });
+
+    // 在現有的 JavaScript 代碼中添加成就面板相關功能
+    document.addEventListener('DOMContentLoaded', () => {
+        const achievementsPanel = document.getElementById('achievementsPanel');
+        const toggleButton = document.getElementById('toggleAchievements');
+        const achievementsList = document.querySelector('.achievements-list');
+
+        // 切換成就面板的顯示/隱藏
+        toggleButton.addEventListener('click', () => {
+            achievementsPanel.classList.toggle('expanded');
+            // 當面板展開時，更新成就列表
+            if (achievementsPanel.classList.contains('expanded')) {
+                updateAchievementsList();
+            }
+        });
+
+        // 更新成就列表
+        function updateAchievementsList() {
+            // 等待遊戲系統初始化
+            if (!window.game || !window.game.achievementSystem) {
+                setTimeout(updateAchievementsList, 100);
+                return;
+            }
+
+            const achievements = window.game.achievementSystem.achievements;
+            achievementsList.innerHTML = '';
+
+            // 添加成就分類標題
+            const basicTitle = document.createElement('div');
+            basicTitle.className = 'achievement-category-title';
+            basicTitle.textContent = '基礎成就';
+            achievementsList.appendChild(basicTitle);
+
+            // 顯示基礎成就
+            for (const key in achievements) {
+                if (achievements[key].type === 'basic') {
+                    const achievement = document.createElement('div');
+                    achievement.className = `achievement-item ${achievements[key].unlocked ? 'unlocked' : 'locked'}`;
+                    achievement.innerHTML = `
+                        <div class="achievement-icon">${achievements[key].unlocked ? '🏆' : '🔒'}</div>
+                        <div class="achievement-info">
+                            <div class="achievement-name">${achievements[key].name}</div>
+                            <div class="achievement-description">${achievements[key].description}</div>
+                            <div class="achievement-status">${achievements[key].unlocked ? '已解鎖' : '未解鎖'}</div>
+                        </div>
+                    `;
+                    achievementsList.appendChild(achievement);
+                }
+            }
+
+            // 添加進階成就標題
+            const advancedTitle = document.createElement('div');
+            advancedTitle.className = 'achievement-category-title';
+            advancedTitle.textContent = '進階成就';
+            achievementsList.appendChild(advancedTitle);
+
+            // 顯示進階成就
+            for (const key in achievements) {
+                if (achievements[key].type === 'advanced') {
+                    const achievement = document.createElement('div');
+                    achievement.className = `achievement-item ${achievements[key].unlocked ? 'unlocked' : 'locked'}`;
+                    achievement.innerHTML = `
+                        <div class="achievement-icon">${achievements[key].unlocked ? '🏆' : '🔒'}</div>
+                        <div class="achievement-info">
+                            <div class="achievement-name">${achievements[key].name}</div>
+                            <div class="achievement-description">${achievements[key].description}</div>
+                            <div class="achievement-status">${achievements[key].unlocked ? '已解鎖' : '未解鎖'}</div>
+                        </div>
+                    `;
+                    achievementsList.appendChild(achievement);
+                }
+            }
+        }
+
+        // 監聽成就解鎖事件
+        document.addEventListener('achievementUnlocked', (event) => {
+            // 如果成就面板是展開的，立即更新顯示
+            if (achievementsPanel.classList.contains('expanded')) {
+                updateAchievementsList();
+            }
+        });
+
+        // 初始更新成就列表
+        updateAchievementsList();
+
+        // 確保成就面板在頁面加載時顯示
+        achievementsPanel.style.display = 'block';
+    });
+
+    // 檢查當前頁面是否為主頁面
+    const currentPage = window.location.pathname.split('/').pop();
+    const isMainPage = currentPage === 'index.html' || currentPage === '';
+    
+    // 設置按鈕顯示狀態
+    document.getElementById('coinKnowledgeBtn').style.display = isMainPage ? 'block' : 'none';
+    document.getElementById('coinQuizBtn').style.display = isMainPage ? 'block' : 'none';
+
+    // 金幣系統相關函數
+    function updateCoins(amount) {
+        let totalCoins = parseInt(localStorage.getItem('totalCoins')) || 0;
+        totalCoins += amount;
+        localStorage.setItem('totalCoins', totalCoins);
+        document.getElementById('totalCoins').textContent = totalCoins + '金幣';
+    }
+
+    // 初始化金幣顯示
+    document.addEventListener('DOMContentLoaded', function() {
+        let totalCoins = parseInt(localStorage.getItem('totalCoins')) || 0;
+        document.getElementById('totalCoins').textContent = totalCoins + '金幣';
+    });
+
+    // 移除教學系統相關函數
+    function showTutorial() {
+        const overlay = document.getElementById('tutorialOverlay');
+        overlay.style.display = 'block';
+        updateTutorialStep(0);
+    }
+
+    function updateTutorialStep(step) {
+        currentStep = step;
+        const stepData = tutorialSteps[step];
+        const target = document.querySelector(stepData.target);
+        const highlight = document.getElementById('tutorialHighlight');
+        const text = document.getElementById('tutorialText');
+        const indicator = document.getElementById('stepIndicator');
+
+        if (!target) {
+            console.error('Target element not found:', stepData.target);
+            return;
+        }
+
+        // 更新高亮框位置
+        const rect = target.getBoundingClientRect();
+        highlight.style.left = rect.left + 'px';
+        highlight.style.top = rect.top + 'px';
+        highlight.style.width = rect.width + 'px';
+        highlight.style.height = rect.height + 'px';
+
+        // 更新提示文字位置
+        text.textContent = stepData.text;
+        switch(stepData.position) {
+            case 'top':
+                text.style.top = (rect.top - text.offsetHeight - 10) + 'px';
+                text.style.left = rect.left + 'px';
+                break;
+            case 'bottom':
+                text.style.top = (rect.bottom + 10) + 'px';
+                text.style.left = rect.left + 'px';
+                break;
+            case 'left':
+                text.style.top = rect.top + 'px';
+                text.style.left = (rect.left - text.offsetWidth - 10) + 'px';
+                break;
+            case 'right':
+                text.style.top = rect.top + 'px';
+                text.style.left = (rect.right + 10) + 'px';
+                break;
+        }
+
+        // 更新步驟指示器
+        indicator.textContent = `${step + 1}/${tutorialSteps.length}`;
+
+        // 更新按鈕狀態
+        document.getElementById('prevStep').disabled = step === 0;
+        document.getElementById('nextStep').textContent = step === tutorialSteps.length - 1 ? '完成' : '下一步';
+    }
+
+    // 移除教學步驟數組
+    const tutorialSteps = [
+        {
+            target: '#guessHeads, #guessTails',
+            text: '點擊其中一個按鈕就會開始小遊戲，來猜測接下來會擲到數字還是圖案',
+            position: 'bottom'
+        },
+        {
+            target: '#flipCoin',
+            text: '當你猜測點擊后，硬幣就會開始旋轉，當硬幣停止時用你便會知道結果是什麼，如果你有猜中恭喜你你金幣會增加，並且隨著你連續差中的次數越多金幣增加量也會越多',
+            position: 'top'
+        },
+        {
+            target: '#leaderboard',
+            text: '左邊的今日排行榜會每天重置記錄，右邊的永久排行榜就不會重置記錄只會顯示最高分的人們',
+            position: 'left'
+        },
+        {
+            target: '#achievementsPanel',
+            text: '當你點擊顯示/隱藏成就系統便會顯示可獲得的成就，也會顯示你已取得那個成就',
+            position: 'right'
+        },
+        {
+            target: '#coinKnowledgeBtn',
+            text: '點擊這裡后打你可以用觀看各個地方的硬幣',
+            position: 'top'
+        },
+        {
+            target: '#coinQuizBtn',
+            text: '快點擊這裡可以遊玩關於貨幣的小測驗，建議觀看貨幣小知識后再遊玩哦除非你很有信心~',
+            position: 'top'
+        },
+        {
+            target: '#coinCounter',
+            text: '隨著你猜中硬幣的正反面或你答中題目增加金幣，金閉可以在未來購買不同造型的硬幣和道具喔!',
+            position: 'bottom'
+        },
+        {
+            target: '.faq-button',
+            text: '你可以再次點擊這裡查看教學!',
+            position: 'left'
+        }
+    ];
+    </script>
+</body>
+</html>

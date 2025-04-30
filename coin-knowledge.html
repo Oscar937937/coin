@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>硬幣小知識</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('background.jpg');
+            background-size: cover;
+            background-position: center;
+            color: #222;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+        .main-content {
+            display: flex;
+            width: 100%;
+            max-width: 1400px;
+            margin: 40px auto;
+            gap: 20px;
+        }
+        .container {
+            flex: 1;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+            padding: 36px 28px 32px 28px;
+            margin: 0;
+        }
+        .nav-sidebar {
+            width: 200px;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+            padding: 20px;
+            height: fit-content;
+            position: sticky;
+            top: 40px;
+        }
+        .nav-title {
+            color: #d48806;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .nav-button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #f8f8f8;
+            border: none;
+            border-radius: 8px;
+            color: #333;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+        }
+        .nav-button:hover {
+            background: #e6e6e6;
+            transform: translateX(5px);
+        }
+        .nav-button.active {
+            background: #d48806;
+            color: white;
+        }
+        h1 {
+            color: #d48806;
+            margin-top: 0;
+            font-size: 2.4em;
+            text-align: center;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 24px;
+            color: #1976d2;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .coin-year-block {
+            margin-bottom: 20px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .coin-year-title {
+            color: #b37f00;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .year-subtitle {
+            color: #b37f00;
+            font-size: 1.4em;
+            margin-bottom: 16px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .year-description {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        .coin-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            padding: 10px;
+        }
+        .coin-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .coin-image {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border-radius: 8px;
+        }
+        .coin-image:hover {
+            transform: scale(1.05);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            overflow: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 60%;
+            max-height: 60vh;
+            object-fit: contain;
+            width: auto;
+            height: auto;
+            transform: scale(1);
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .modal-content {
+            animation: zoom 0.3s;
+        }
+        @keyframes zoom {
+            from {transform: scale(0.1)}
+            to {transform: scale(1)}
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-btn">
+        <i class="fas fa-arrow-left"></i> 返回
+    </a>
+
+    <div class="main-content">
+    <div class="container">
+        <a href="./index.html" class="back-link">← 返回遊戲主頁</a>
+            <div id="hk-content">
+        <h1>香港硬幣小知識</h1>
+        <div id="coinKnowledgeContent">
+            <!-- 動態載入年份和圖片 -->
+                </div>
+            </div>
+            <div id="us-content" style="display: none;">
+                <h1>美國硬幣小知識</h1>
+                <div id="usCoinKnowledgeContent">
+                    <!-- 動態載入美國硬幣資訊 -->
+                </div>
+            </div>
+            <div id="india-content" style="display: none;">
+                <h1>印度硬幣小知識</h1>
+                <div id="indiaCoinKnowledgeContent">
+                    <!-- 動態載入印度硬幣資訊 -->
+                </div>
+            </div>
+            <div id="canada-content" style="display: none;">
+                <h1>加拿大硬幣小知識</h1>
+                <div id="canadaCoinKnowledgeContent">
+                    <!-- 動態載入加拿大硬幣資訊 -->
+                </div>
+            </div>
+        </div>
+        <div class="nav-sidebar">
+            <div class="nav-title">選擇國家</div>
+            <button class="nav-button active" onclick="showCountry('hk')">香港硬幣</button>
+            <button class="nav-button" onclick="showCountry('us')">美國硬幣</button>
+            <button class="nav-button" onclick="showCountry('india')">印度硬幣</button>
+            <button class="nav-button" onclick="showCountry('canada')">加拿大硬幣</button>
+        </div>
+    </div>
+    <!-- 圖片放大預覽 -->
+    <div id="coinImgModal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);z-index:3000;align-items:center;justify-content:center;">
+        <img id="coinImgModalImg" src="" alt="硬幣大圖" style="max-width:90vw;max-height:90vh;border-radius:12px;box-shadow:0 4px 32px rgba(0,0,0,0.5);">
+    </div>
+    <script>
+    // 年份資料（由新到舊）
+    const coinYears = [
+        '2002','1998','1997','1994','1993','1989','1986','1980','1976-1987','1976','1975','1960','1955','1937','1919','1902','1866','1864'
+    ];
+
+    // 美國硬幣年份資料
+    const usCoinYears = [
+        '2023', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010'
+    ];
+
+    // 印度硬幣年份資料
+    const indiaCoinYears = [
+        '2023', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010'
+    ];
+
+    // 加拿大硬幣年份資料
+    const canadaCoinYears = [
+        '2023', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010'
+    ];
+    
+    const contentDiv = document.getElementById('coinKnowledgeContent');
+    const usContentDiv = document.getElementById('usCoinKnowledgeContent');
+    const indiaContentDiv = document.getElementById('indiaCoinKnowledgeContent');
+    const canadaContentDiv = document.getElementById('canadaCoinKnowledgeContent');
+    
+    function loadCoinKnowledge() {
+        // 香港硬幣年份列表（按時間順序從新到舊）
+        const hkYears = [
+            '2002', '1998', '1997', '1994', '1993', '1989', '1986', '1980', 
+            '1976-1987', '1976', '1975', '1960', '1955', '1937', '1919', '1902', '1866', '1864'
+        ];
+        
+        // 年份標題和介紹
+        const yearDescriptions = {
+            '2002': {
+                title: '政府發行「五福臨門 世代相傳」紀念幣套裝',
+                description: '政府發行「五福臨門 世代相傳」紀念幣套裝，慶祝香港特別行政區成立五周年。五枚紀念幣分別代表 「萬事如意」、 「年年有餘」、「馬到功成」、 「花開富貴」、「貨如輪轉」。'
+            },
+            '1998': {
+                title: '政府發行香港國際機場紀念金幣',
+                description: '政府推出香港國際機場紀念金幣，以慶祝新機場於1998年7月啟用。'
+            },
+            '1997': {
+                title: '政府發行「1997紀念金幣」',
+                description: '政府發行「1997紀念金幣」及「1997年紀念精鑄錢幣套裝」，以迎接香港特別行政區於1997年7月1日成立。'
+            },
+            '1994': {
+                title: '十元硬幣面世',
+                description: '十元硬幣開始在市面流通，政府也發行十元金幣作紀念。'
+            },
+            '1993': {
+                title: '洋紫荊硬幣面世',
+                description: '為配合1997年香港回歸，政府推出以香港市花 — 洋紫荊為設計的硬幣，取代當時以英女皇伊利沙伯二世肖像設計為題的硬幣。'
+            },
+            '1989': {
+                title: '停用五仙硬幣',
+                description: '五仙硬幣停止流通。'
+            },
+            '1986': {
+                title: '政府發行紀念金幣，紀念英女皇第二次訪港',
+                description: '政府發行一千元金幣紀念英女皇伊利沙伯二世第二次訪港。'
+            },
+            '1980': {
+                title: '鑄造新五元硬幣',
+                description: '政府鑄造新五元硬幣取代十邊形五元硬幣。'
+            },
+            '1976-1987': {
+                title: '發行十二生肖紀念金幣',
+                description: '政府發行十二生肖紀念金幣。每個金幣的面值為一千元，並印上當年生肖。該套金幣由1976年龍年開始發行，至1987年兔年為止。'
+            },
+            '1976': {
+                title: '五元硬幣面世',
+                description: '政府首次發行五元硬幣，為十邊形設計。'
+            },
+            '1975': {
+                title: '首次發行紀念金幣',
+                description: '政府首次發行面額為一千元的紀念金幣。'
+            },
+            '1960': {
+                title: '政府恢復鑄造一元硬幣',
+                description: '政府停止發行一元紙幣，恢復鑄造一元硬幣，俗稱「大餅」。'
+            },
+            '1955': {
+                title: '香港硬幣正面換上英女皇伊利沙伯二世肖像',
+                description: '香港硬幣正面換上英女皇伊利沙伯二世的肖像。'
+            },
+            '1937': {
+                title: '香港硬幣正面換上英皇喬治六世肖像',
+                description: '香港硬幣正面換上英女皇伊利沙伯二世的父親英皇喬治六世的肖像。'
+            },
+            '1919': {
+                title: '香港硬幣正面換上英皇喬治五世肖像',
+                description: '香港硬幣正面換上英女皇伊利沙伯二世的祖父英皇喬治五世的肖像。'
+            },
+            '1902': {
+                title: '香港硬幣正面換上英皇愛德華七世肖像',
+                description: '香港硬幣正面換上英女皇伊利沙伯二世的曾祖父英皇愛德華七世的肖像。'
+            },
+            '1866': {
+                title: '香港推出首批五仙、兩毫、五毫及一元硬幣',
+                description: '政府興建香港鑄幣局，開始鑄造面額五仙、兩毫、半元（即五毫）及一元銀幣。鑄幣局於兩年後結業。'
+            },
+            '1864': {
+                title: '香港發行首批硬幣，面值為一文、一仙和一毫',
+                description: '香港首批硬幣面世，面值包括一文、一仙和一毫。一毫以銀鑄造，而一仙和一文則為銅鑄。一文錢就是一元的千分之一。當年一文錢可買到一頓簡單的早餐如一碗白粥和油條、一碗雲吞麵或者麵包。成語「一文不值」便是形容東西不值錢。'
+            }
+        };
+        
+        const container = document.getElementById('coinKnowledgeContent');
+        
+        // 創建一個數組來存儲所有年份的數據
+        const yearDataPromises = hkYears.map(year => {
+            return fetch(`HK/${year}/index.json`)
+                .then(response => response.json())
+                .then(data => ({
+                    year: data.year,
+                    data: data,
+                    description: yearDescriptions[year]
+                }))
+                .catch(error => {
+                    console.error(`Error loading HK coin knowledge for year ${year}:`, error);
+                    return null;
+                });
+        });
+        
+        // 等待所有數據加載完成後，按順序顯示
+        Promise.all(yearDataPromises)
+            .then(yearDataArray => {
+                // 過濾掉加載失敗的年份
+                const validYearData = yearDataArray.filter(data => data !== null);
+                
+                // 按年份順序顯示
+                validYearData.forEach(({ year, data, description }) => {
+                    const yearBlock = document.createElement('div');
+                    yearBlock.className = 'coin-year-block';
+                    
+                    const yearTitle = document.createElement('h2');
+                    yearTitle.className = 'coin-year-title';
+                    yearTitle.textContent = data.year;
+                    yearBlock.appendChild(yearTitle);
+                    
+                    if (description) {
+                        const titleElement = document.createElement('h3');
+                        titleElement.className = 'year-subtitle';
+                        titleElement.textContent = description.title;
+                        yearBlock.appendChild(titleElement);
+                        
+                        const descriptionElement = document.createElement('p');
+                        descriptionElement.className = 'year-description';
+                        descriptionElement.textContent = description.description;
+                        yearBlock.appendChild(descriptionElement);
+                    }
+                    
+                    const coinList = document.createElement('div');
+                    coinList.className = 'coin-list';
+                    
+                    // 使用 Set 來追蹤已顯示的圖片路徑
+                    const displayedImages = new Set();
+                    
+                    data.coins.forEach(coin => {
+                        // 顯示正面圖片
+                        const obversePath = `HK/${data.year}/${coin.images.obverse}`;
+                        if (!displayedImages.has(obversePath)) {
+                            displayedImages.add(obversePath);
+                            const obverseItem = document.createElement('div');
+                            obverseItem.className = 'coin-item';
+                            
+                        const obverseImg = document.createElement('img');
+                            obverseImg.src = obversePath;
+                            obverseImg.alt = `${coin.denomination} 正面`;
+                        obverseImg.className = 'coin-image';
+                            obverseImg.onclick = () => showModal(obversePath);
+                            obverseItem.appendChild(obverseImg);
+                            coinList.appendChild(obverseItem);
+                        }
+                        
+                        // 顯示反面圖片
+                        const reversePath = `HK/${data.year}/${coin.images.reverse}`;
+                        if (!displayedImages.has(reversePath)) {
+                            displayedImages.add(reversePath);
+                            const reverseItem = document.createElement('div');
+                            reverseItem.className = 'coin-item';
+                            
+                            const reverseImg = document.createElement('img');
+                            reverseImg.src = reversePath;
+                            reverseImg.alt = `${coin.denomination} 反面`;
+                            reverseImg.className = 'coin-image';
+                            reverseImg.onclick = () => showModal(reversePath);
+                            reverseItem.appendChild(reverseImg);
+                            coinList.appendChild(reverseItem);
+                        }
+                    });
+                    
+                    // 只有在有圖片顯示時才添加年份區塊
+                    if (coinList.children.length > 0) {
+                        yearBlock.appendChild(coinList);
+                        container.appendChild(yearBlock);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error loading coin knowledge:', error);
+            });
+    }
+    
+    function showModal(src) {
+        const modal = document.getElementById('coinImgModal');
+        const modalImg = document.getElementById('coinImgModalImg');
+        
+        modal.style.display = 'flex';
+        modalImg.src = src;
+        
+        // 點擊關閉
+        modal.onclick = function() {
+            modal.style.display = 'none';
+        }
+    }
+    
+    function generateCoinListHTML(data, country = 'US') {
+        let html = '';
+        data.forEach(coin => {
+            // 根據國家選擇正確的圖片路徑
+            let imagePath;
+            if (country === 'Canada') {
+                imagePath = `Canada/${coin.image}`;  // 添加 Canada 目錄前綴
+            } else {
+                imagePath = `${country}/${coin.image}`;
+            }
+            html += `<div class="coin-item">
+                <img class="coin-image" src="${imagePath}" alt="${coin.denomination}" onclick="showLargeImage('${imagePath}')">
+            </div>`;
+        });
+        return html;
+    }
+
+    function loadUSCoinKnowledge() {
+        fetch('US/2023/index.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('usCoinKnowledgeContent');
+                
+                // 按面值排序的硬幣描述
+                const coinDescriptions = {
+                    'dollar': {
+                        title: '1美元硬幣',
+                        description: '1美元硬幣是美國最大面值的流通硬幣，正面印有薩卡加維亞的肖像，反面則印有飛翔的鷹圖案。'
+                    },
+                    'half-dollar': {
+                        title: '50美分硬幣',
+                        description: '50美分硬幣正面印有約翰·甘迺迪總統的肖像，反面則印有總統印章的圖案。'
+                    },
+                    'quarter': {
+                        title: '25美分硬幣',
+                        description: '25美分硬幣是美國最常用的硬幣之一，正面印有喬治·華盛頓的肖像，反面則會定期更換設計，展示美國各州、領地和國家公園的特色。'
+                    },
+                    'dime': {
+                        title: '10美分硬幣',
+                        description: '10美分硬幣是美國最小的硬幣，正面印有富蘭克林·羅斯福總統的肖像，反面則印有火炬、橄欖枝和橡樹枝的圖案。'
+                    },
+                    'nickel': {
+                        title: '5美分硬幣',
+                        description: '5美分硬幣正面印有托馬斯·傑斐遜總統的肖像，反面則印有蒙蒂塞洛莊園的圖案，這是傑斐遜的故居。'
+                    },
+                    'penny': {
+                        title: '1美分硬幣',
+                        description: '1美分硬幣是美國最古老的硬幣之一，正面印有亞伯拉罕·林肯總統的肖像，反面則印有林肯紀念堂的圖案。'
+                    }
+                };
+
+                // 按面值排序的硬幣列表（從大到小）
+                const denominations = ['dollar', 'half-dollar', 'quarter', 'dime', 'nickel', 'penny'];
+                
+                denominations.forEach(denomination => {
+                    const coinBlock = document.createElement('div');
+                    coinBlock.className = 'coin-year-block';
+                    
+                    // 添加標題
+                    const titleElement = document.createElement('h2');
+                    titleElement.className = 'coin-year-title';
+                    titleElement.textContent = coinDescriptions[denomination].title;
+                    coinBlock.appendChild(titleElement);
+                    
+                    // 添加描述
+                    const descriptionElement = document.createElement('p');
+                    descriptionElement.className = 'year-description';
+                    descriptionElement.textContent = coinDescriptions[denomination].description;
+                    coinBlock.appendChild(descriptionElement);
+                    
+                    const coinList = document.createElement('div');
+                    coinList.className = 'coin-list';
+                    
+                    // 使用 Set 來追蹤已顯示的圖片路徑
+                    const displayedImages = new Set();
+                    
+                    // 找到對應面值的硬幣
+                    const coins = data.coins.filter(c => {
+                        const coinValue = c.denomination.toLowerCase();
+                        if (denomination === 'dollar') return coinValue === '1美元';
+                        if (denomination === 'half-dollar') return coinValue === '50美分';
+                        if (denomination === 'quarter') return coinValue === '25美分';
+                        if (denomination === 'dime') return coinValue === '10美分';
+                        if (denomination === 'nickel') return coinValue === '5美分';
+                        if (denomination === 'penny') return coinValue === '1美分';
+                        return false;
+                    });
+
+                    // 只顯示每種面值的獨特圖片
+                    coins.forEach(coin => {
+                        // 修正圖片路徑
+                        const imagePath = `US/${coin.image.replace('$', '')}`;
+                        if (!displayedImages.has(imagePath)) {
+                            displayedImages.add(imagePath);
+                            const coinItem = document.createElement('div');
+                            coinItem.className = 'coin-item';
+                            
+                            const coinImg = document.createElement('img');
+                            coinImg.src = imagePath;
+                            coinImg.alt = coin.denomination;
+                            coinImg.className = 'coin-image';
+                            coinImg.style.display = 'block';
+                            coinImg.style.width = '150px';
+                            coinImg.style.height = '150px';
+                            coinImg.style.objectFit = 'contain';
+                            coinImg.onclick = () => showModal(coinImg.src);
+                            coinItem.appendChild(coinImg);
+                            
+                            // 添加硬幣描述
+                            if (coin.description) {
+                                const coinDescription = document.createElement('p');
+                                coinDescription.className = 'coin-description';
+                                coinDescription.textContent = coin.description;
+                                coinItem.appendChild(coinDescription);
+                            }
+                            
+                            coinList.appendChild(coinItem);
+                        }
+                    });
+                    
+                    coinBlock.appendChild(coinList);
+                    container.appendChild(coinBlock);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading US coin knowledge:', error);
+            });
+    }
+
+    function loadIndiaCoinKnowledge() {
+        fetch('India/2023/index.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('indiaCoinKnowledgeContent');
+                
+                // 印度硬幣分類描述
+                const coinCategories = {
+                    '10-rupee': {
+                        title: '10盧比硬幣',
+                        description: '10盧比硬幣是印度最大面值的流通硬幣，採用雙金屬材質，外圈為銅鎳合金，內圈為鎳黃銅。這些硬幣通常印有印度國徽、國旗、國花蓮花和國鳥孔雀等國家象徵。'
+                    },
+                    '5-rupee': {
+                        title: '5盧比硬幣',
+                        description: '5盧比硬幣是印度常用的硬幣之一，採用鎳黃銅材質。這些硬幣印有印度國徽和各種國家象徵，在印度日常交易中廣泛使用。'
+                    },
+                    '2-rupee': {
+                        title: '2盧比硬幣',
+                        description: '2盧比硬幣採用不鏽鋼材質，是印度流通最廣的硬幣之一。這些硬幣印有印度國徽，設計簡潔耐用。'
+                    },
+                    '1-rupee': {
+                        title: '1盧比硬幣',
+                        description: '1盧比硬幣是印度最基本的貨幣單位，採用不鏽鋼材質。這些硬幣印有印度國徽，是印度經濟活動的重要組成部分。'
+                    }
+                };
+
+                // 按類別顯示硬幣
+                Object.entries(coinCategories).forEach(([category, info]) => {
+                    const coinBlock = document.createElement('div');
+                    coinBlock.className = 'coin-year-block';
+                    
+                    // 添加標題
+                    const titleElement = document.createElement('h2');
+                    titleElement.className = 'coin-year-title';
+                    titleElement.textContent = info.title;
+                    coinBlock.appendChild(titleElement);
+                    
+                    // 添加描述
+                    const descriptionElement = document.createElement('p');
+                    descriptionElement.className = 'year-description';
+                    descriptionElement.textContent = info.description;
+                    coinBlock.appendChild(descriptionElement);
+                    
+                    const coinList = document.createElement('div');
+                    coinList.className = 'coin-list';
+                    
+                    // 使用 Set 來追蹤已顯示的圖片路徑
+                    const displayedImages = new Set();
+                    
+                    // 根據類別過濾硬幣
+                    const coins = data.coins.filter(coin => {
+                        const denomination = coin.denomination.toLowerCase();
+                        if (category === '10-rupee') return denomination.includes('10盧比');
+                        if (category === '5-rupee') return denomination.includes('5盧比');
+                        if (category === '2-rupee') return denomination.includes('2盧比');
+                        if (category === '1-rupee') return denomination.includes('1盧比');
+                        return false;
+                    });
+
+                    // 顯示硬幣圖片和描述
+                    coins.forEach(coin => {
+                        const imagePath = `India/${coin.image}`;
+                        if (!displayedImages.has(imagePath)) {
+                            displayedImages.add(imagePath);
+                            const coinItem = document.createElement('div');
+                            coinItem.className = 'coin-item';
+                            
+                            const coinImg = document.createElement('img');
+                            coinImg.src = imagePath;
+                            coinImg.alt = coin.denomination;
+                            coinImg.className = 'coin-image';
+                            coinImg.style.display = 'block';
+                            coinImg.style.width = '150px';
+                            coinImg.style.height = '150px';
+                            coinImg.style.objectFit = 'contain';
+                            coinImg.onclick = () => showModal(coinImg.src);
+                            coinItem.appendChild(coinImg);
+                            
+                            // 添加硬幣描述
+                            if (coin.description) {
+                                const coinDescription = document.createElement('p');
+                                coinDescription.className = 'coin-description';
+                                coinDescription.textContent = coin.description;
+                                coinItem.appendChild(coinDescription);
+                            }
+                            
+                            coinList.appendChild(coinItem);
+                        }
+                    });
+                    
+                    coinBlock.appendChild(coinList);
+                    container.appendChild(coinBlock);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading India coin knowledge:', error);
+            });
+    }
+
+    function loadCanadaCoinKnowledge() {
+        fetch('Canada/2023/index.json')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('canadaCoinKnowledgeContent');
+                
+                // 加拿大硬幣分類描述
+                const coinCategories = {
+                    'toonie': {
+                        title: '2加元硬幣',
+                        description: '2加元硬幣（俗稱Toonie）是加拿大最大面值的流通硬幣，採用雙金屬材質，外圈為鎳，內圈為鋁青銅。硬幣正面印有英國女王伊麗莎白二世的肖像，背面則印有北極熊的圖案。'
+                    },
+                    'loonie': {
+                        title: '1加元硬幣',
+                        description: '1加元硬幣（俗稱Loonie）是加拿大最著名的硬幣，採用鍍金鎳材質。硬幣正面印有英國女王伊麗莎白二世的肖像，背面則印有潛鳥的圖案，這也是它被稱為"Loonie"的原因。'
+                    },
+                    'quarter': {
+                        title: '25加分硬幣',
+                        description: '25加分硬幣是加拿大最常用的硬幣之一，採用鍍鎳鋼材質。硬幣正面印有英國女王伊麗莎白二世的肖像，背面則會定期更換設計，展示加拿大的自然風光和文化特色。'
+                    },
+                    'dime': {
+                        title: '10加分硬幣',
+                        description: '10加分硬幣是加拿大最小的硬幣之一，採用鍍鎳鋼材質。硬幣正面印有英國女王伊麗莎白二世的肖像，背面則印有加拿大著名的帆船"藍鼻子號"的圖案。'
+                    },
+                    'nickel': {
+                        title: '5加分硬幣',
+                        description: '5加分硬幣採用鍍鎳鋼材質。硬幣正面印有英國女王伊麗莎白二世的肖像，背面則印有加拿大國徽的圖案，包括海狸、皇冠和楓葉等元素。'
+                    },
+                    'penny': {
+                        title: '1加分硬幣',
+                        description: '1加分硬幣（已停止流通）採用鍍銅鋼材質。硬幣正面印有英國女王伊麗莎白二世的肖像，背面則印有楓葉的圖案。加拿大政府於2013年停止發行1加分硬幣。'
+                    }
+                };
+
+                // 按類別顯示硬幣
+                Object.entries(coinCategories).forEach(([category, info]) => {
+                    const coinBlock = document.createElement('div');
+                    coinBlock.className = 'coin-year-block';
+                    
+                    // 添加標題
+                    const titleElement = document.createElement('h2');
+                    titleElement.className = 'coin-year-title';
+                    titleElement.textContent = info.title;
+                    coinBlock.appendChild(titleElement);
+                    
+                    // 添加描述
+                    const descriptionElement = document.createElement('p');
+                    descriptionElement.className = 'year-description';
+                    descriptionElement.textContent = info.description;
+                    coinBlock.appendChild(descriptionElement);
+                    
+                    const coinList = document.createElement('div');
+                    coinList.className = 'coin-list';
+                    
+                    // 使用 Set 來追蹤已顯示的圖片路徑
+                    const displayedImages = new Set();
+                    
+                    // 根據類別過濾硬幣
+                    const coins = data.coins.filter(coin => {
+                        const denomination = coin.denomination.toLowerCase();
+                        if (category === 'toonie') return denomination === '2加元';
+                        if (category === 'loonie') return denomination === '1加元';
+                        if (category === 'quarter') return denomination === '25加分';
+                        if (category === 'dime') return denomination === '10加分';
+                        if (category === 'nickel') return denomination === '5加分';
+                        if (category === 'penny') return denomination === '1加分';
+                        return false;
+                    });
+
+                    // 顯示硬幣圖片和描述
+                    coins.forEach(coin => {
+                        const imagePath = `Canada/${coin.image}`;
+                        const coinItem = document.createElement('div');
+                        coinItem.className = 'coin-item';
+                        
+                        const coinImg = document.createElement('img');
+                        coinImg.src = imagePath;
+                        coinImg.alt = coin.denomination;
+                        coinImg.className = 'coin-image';
+                        coinImg.style.display = 'block';
+                        coinImg.style.width = '150px';
+                        coinImg.style.height = '150px';
+                        coinImg.style.objectFit = 'contain';
+                        coinImg.onclick = () => showModal(coinImg.src);
+                        coinItem.appendChild(coinImg);
+                        
+                        // 添加硬幣描述
+                        if (coin.description) {
+                            const coinDescription = document.createElement('p');
+                            coinDescription.className = 'coin-description';
+                            coinDescription.textContent = coin.description;
+                            coinItem.appendChild(coinDescription);
+                        }
+                        
+                        coinList.appendChild(coinItem);
+                    });
+                    
+                    coinBlock.appendChild(coinList);
+                    container.appendChild(coinBlock);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading Canada coin knowledge:', error);
+            });
+    }
+
+    function showCountry(country) {
+        // 隱藏所有內容
+        document.getElementById('hk-content').style.display = 'none';
+        document.getElementById('us-content').style.display = 'none';
+        document.getElementById('india-content').style.display = 'none';
+        document.getElementById('canada-content').style.display = 'none';
+        
+        // 顯示選中的內容
+        document.getElementById(`${country}-content`).style.display = 'block';
+        
+        // 更新按鈕狀態
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.classList.remove('active');
+        });
+        document.querySelector(`.nav-button[onclick="showCountry('${country}')"]`).classList.add('active');
+    }
+    </script>
+    <script>
+    // 在頁面加載時自動調用加載函數
+    document.addEventListener('DOMContentLoaded', function() {
+        // 加載所有國家的硬幣知識
+    loadCoinKnowledge();
+        loadUSCoinKnowledge();
+        loadIndiaCoinKnowledge();
+        loadCanadaCoinKnowledge();
+        
+        // 默認顯示香港硬幣內容
+        showCountry('hk');
+    });
+    </script>
+</body>
+</html> 
